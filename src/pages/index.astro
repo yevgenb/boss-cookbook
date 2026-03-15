@@ -13,35 +13,48 @@ const recipes = all
   <p class="muted">A small public cookbook of the recipes we actually cooked.</p>
 
   <div class="card" style="margin: 16px 0;">
-    <strong>Quick start:</strong>
-    <ul>
-      <li>Browse everything on <a href="/recipes/">/recipes</a></li>
-      <li>Explore categories on <a href="/tags/">/tags</a></li>
-    </ul>
+    <div style="display:flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between;">
+      <div>
+        <div style="font-weight: 650;">How it works</div>
+        <div class="muted">Read-only site. When you reply <strong>“save recipe”</strong> in Telegram, Handy publishes it here.</div>
+      </div>
+      <div style="display:flex; gap: 10px;">
+        <a class="tag" href="/recipes/">Browse recipes</a>
+        <a class="tag" href="/tags/">Browse tags</a>
+      </div>
+    </div>
   </div>
 
   <h2 style="margin-top: 24px;">Latest</h2>
-  <div class="grid" style="margin-top: 12px;">
-    {recipes.map((r) => (
-      <a class="card" href={`/recipes/${r.id.replace(/\.md$/, '')}/`}>
-        <div style="display:flex; justify-content: space-between; gap: 12px;">
-          <strong>{r.data.title}</strong>
-          {r.data.date ? (
-            <span class="muted" style="white-space: nowrap;">{r.data.date.toISOString().slice(0, 10)}</span>
-          ) : null}
-        </div>
-        {r.data.tags?.length ? (
-          <div class="tagrow" style="margin-top: 10px;">
-            {r.data.tags.slice(0, 4).map((t) => (
-              <span class="tag">{t}</span>
-            ))}
-          </div>
-        ) : (
-          <div class="muted" style="margin-top: 10px;">No tags yet</div>
-        )}
-      </a>
-    ))}
-  </div>
 
-  <p class="muted" style="margin-top: 18px;">Want something added? Tell Handy in Telegram: “save this recipe”.</p>
+  {recipes.length ? (
+    <div class="grid" style="margin-top: 12px;">
+      {recipes.map((r) => (
+        <a class="card" href={`/recipes/${r.id.replace(/\.md$/, '')}/`}>
+          <div style="display:flex; justify-content: space-between; gap: 12px;">
+            <strong>{r.data.title}</strong>
+            {r.data.date ? (
+              <span class="muted" style="white-space: nowrap;">{r.data.date.toISOString().slice(0, 10)}</span>
+            ) : null}
+          </div>
+          {r.data.tags?.length ? (
+            <div class="tagrow" style="margin-top: 10px;">
+              {r.data.tags.slice(0, 4).map((t) => (
+                <span class="tag">{t}</span>
+              ))}
+            </div>
+          ) : (
+            <div class="muted" style="margin-top: 10px;">No tags yet</div>
+          )}
+        </a>
+      ))}
+    </div>
+  ) : (
+    <div class="card" style="margin-top: 12px;">
+      <div style="font-weight: 650;">No recipes yet.</div>
+      <div class="muted" style="margin-top: 6px;">In Telegram (Tasty ideas), paste a recipe and reply “save recipe”.</div>
+    </div>
+  )}
+
+  <p class="muted" style="margin-top: 18px;">Tip: on iPhone, Safari → Share → Add to Home Screen.</p>
 </BaseLayout>
