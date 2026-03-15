@@ -1,0 +1,30 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const all = await getCollection('recipes', ({ data }) => data.status === 'published');
+const tagCounts = new Map();
+for (const r of all) {
+  for (const t of (r.data.tags ?? [])) {
+    tagCounts.set(t, (tagCounts.get(t) ?? 0) + 1);
+  }
+}
+const tags = Array.from(tagCounts.entries())
+  .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+  .map(([tag, count]) => ({ tag, count }));
+---
+
+<BaseLayout title="Tags — Tasty Ideas">
+  <h1>Tags</h1>
+  {tags.length ? (
+    <div class="card" style="margin-top: 12px;">
+      <div class="tagrow">
+        {tags.map(({ tag, count }) => (
+          <a class="tag" href={`/tags/${encodeURIComponent(tag)}/`}>{tag} ({count})</a>
+        ))}
+      </div>
+    </div>
+  ) : (
+    <p class="muted">No tags yet.</p>
+  )}
+</BaseLayout>

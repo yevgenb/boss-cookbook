@@ -1,17 +1,47 @@
 ---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
 
+const all = await getCollection('recipes', ({ data }) => data.status === 'published');
+const recipes = all
+  .sort((a, b) => (b.data.date?.getTime() ?? 0) - (a.data.date?.getTime() ?? 0))
+  .slice(0, 6);
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout title="Tasty Ideas Recipes">
+  <h1>Tasty Ideas Recipes</h1>
+  <p class="muted">A small public cookbook of the recipes we actually cooked.</p>
+
+  <div class="card" style="margin: 16px 0;">
+    <strong>Quick start:</strong>
+    <ul>
+      <li>Browse everything on <a href="/recipes/">/recipes</a></li>
+      <li>Explore categories on <a href="/tags/">/tags</a></li>
+    </ul>
+  </div>
+
+  <h2 style="margin-top: 24px;">Latest</h2>
+  <div class="grid" style="margin-top: 12px;">
+    {recipes.map((r) => (
+      <a class="card" href={`/recipes/${r.id.replace(/\.md$/, '')}/`}>
+        <div style="display:flex; justify-content: space-between; gap: 12px;">
+          <strong>{r.data.title}</strong>
+          {r.data.date ? (
+            <span class="muted" style="white-space: nowrap;">{r.data.date.toISOString().slice(0, 10)}</span>
+          ) : null}
+        </div>
+        {r.data.tags?.length ? (
+          <div class="tagrow" style="margin-top: 10px;">
+            {r.data.tags.slice(0, 4).map((t) => (
+              <span class="tag">{t}</span>
+            ))}
+          </div>
+        ) : (
+          <div class="muted" style="margin-top: 10px;">No tags yet</div>
+        )}
+      </a>
+    ))}
+  </div>
+
+  <p class="muted" style="margin-top: 18px;">Want something added? Tell Handy in Telegram: “save this recipe”.</p>
+</BaseLayout>

@@ -1,0 +1,103 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const all = await getCollection('recipes', ({ data }) => data.status === 'published');
+const recipes = all.sort((a, b) => (a.data.title.localeCompare(b.data.title)));
+
+const searchIndex = recipes.map((r) => ({
+  slug: r.id.replace(/\.md$/, ''),
+  title: r.data.title,
+  tags: r.data.tags ?? [],
+  date: r.data.date ? r.data.date.toISOString().slice(0, 10) : null,
+}));
+---
+
+<BaseLayout title="Recipes — Tasty Ideas">
+  <h1>Recipes</h1>
+  <p class="muted">Search by name or tag.</p>
+
+  <input id="q" class="search" type="search" placeholder="Search… (e.g., pasta, spicy, chicken)" autocomplete="off" />
+
+  <div id="results" class="grid" style="margin-top: 14px;"></div>
+
+  <noscript>
+    <div class="grid" style="margin-top: 14px;">
+      {recipes.map((r) => (
+        <a class="card" href={`/recipes/${r.slug}/`}>
+          <strong>{r.data.title}</strong>
+          <div class="muted">{r.data.date ? r.data.date.toISOString().slice(0, 10) : ''}</div>
+        </a>
+      ))}
+    </div>
+  </noscript>
+
+  <script define:vars={{ searchIndex }}>
+    const q = document.getElementById('q');
+    const results = document.getElementById('results');
+
+    function render(items) {
+      results.innerHTML = '';
+      for (const it of items) {
+        const a = document.createElement('a');
+        a.className = 'card';
+        a.href = `/recipes/${it.slug}/`;
+
+        const top = document.createElement('div');
+        top.style.display = 'flex';
+        top.style.justifyContent = 'space-between';
+        top.style.gap = '12px';
+
+        const title = document.createElement('strong');
+        title.textContent = it.title;
+        top.appendChild(title);
+
+        if (it.date) {
+          const date = document.createElement('span');
+          date.className = 'muted';
+          date.style.whiteSpace = 'nowrap';
+          date.textContent = it.date;
+          top.appendChild(date);
+        }
+
+        a.appendChild(top);
+
+        const tags = document.createElement('div');
+        tags.className = 'tagrow';
+        tags.style.marginTop = '10px';
+        if (it.tags?.length) {
+          for (const t of it.tags.slice(0, 6)) {
+            const s = document.createElement('span');
+            s.className = 'tag';
+            s.textContent = t;
+            tags.appendChild(s);
+          }
+        } else {
+          const s = document.createElement('span');
+          s.className = 'muted';
+          s.textContent = 'No tags yet';
+          tags.appendChild(s);
+        }
+        a.appendChild(tags);
+
+        results.appendChild(a);
+      }
+    }
+
+    function filter(query) {
+      const qq = (query || '').trim().toLowerCase();
+      if (!qq) return searchIndex;
+      return searchIndex.filter((r) => {
+        const hay = `${r.title} ${(r.tags || []).join(' ')}`.toLowerCase();
+        return hay.includes(qq);
+      });
+    }
+
+    function onInput() {
+      render(filter(q.value));
+    }
+
+    q.addEventListener('input', onInput);
+    render(filter(''));
+  </script>
+</BaseLayout>

@@ -1,43 +1,68 @@
-# Astro Starter Kit: Minimal
+# Tasty Ideas — Recipes (read-only public site)
 
-```sh
-npm create astro@latest -- --template minimal
+A tiny, mobile-friendly cookbook site generated from Markdown recipe files.
+
+- **Readers:** anyone with the URL (public)
+- **Writers:** just us (Handy), by adding/editing Markdown in this repo
+- **No login, no photos** (for now)
+
+## Add a recipe
+
+Create a new file:
+
+- `src/content/recipes/<slug>.md`
+
+Example:
+
+```md
+---
+title: "My Recipe"
+date: 2026-03-15
+tags: [dinner, spicy]
+source: "Tasty ideas"
+status: published
+---
+
+## Ingredients
+
+- ...
+
+## Steps
+
+1. ...
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+Notes:
+- `status: draft` keeps it out of the site.
+- The URL becomes `/recipes/<slug>/`.
 
-## 🚀 Project Structure
+## Run locally
 
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+```bash
+npm install
+npm run dev
+# open http://localhost:4321
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+## Build
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+```bash
+npm run build
+npm run preview
+```
 
-Any static assets, like images, can be placed in the `public/` directory.
+## Deploy (no domain yet)
 
-## 🧞 Commands
+Recommended: **Cloudflare Pages** → you’ll get a free URL like:
 
-All commands are run from the root of the project, from a terminal:
+- `https://<project>.pages.dev`
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+High-level steps:
+1. Push this repo to GitHub.
+2. In Cloudflare Pages: “Create a project” → connect the repo.
+3. Build settings:
+   - Framework preset: **Astro**
+   - Build command: `npm run build`
+   - Output directory: `dist`
 
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+(We can add a custom domain later in Cloudflare when you buy one.)

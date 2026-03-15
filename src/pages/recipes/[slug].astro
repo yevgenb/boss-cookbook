@@ -1,0 +1,40 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const recipes = await getCollection('recipes', ({ data }) => data.status === 'published');
+  return recipes.map((r) => {
+    const slug = r.id.replace(/\.md$/, '');
+    return { params: { slug }, props: { recipe: r, slug } };
+  });
+}
+
+const { recipe, slug } = Astro.props;
+const { Content } = await render(recipe);
+const title = `${recipe.data.title} — Tasty Ideas`;
+---
+
+<BaseLayout title={title}>
+  <p class="muted"><a href="/recipes/">← All recipes</a></p>
+  <article>
+    <h1>{recipe.data.title}</h1>
+
+    <div class="muted" style="display:flex; flex-wrap: wrap; gap: 10px; align-items: center;">
+      {recipe.data.date ? <span>{recipe.data.date.toISOString().slice(0, 10)}</span> : null}
+      {recipe.data.source ? <span>• Source: {recipe.data.source}</span> : null}
+    </div>
+
+    {recipe.data.tags?.length ? (
+      <div class="tagrow" style="margin-top: 12px;">
+        {recipe.data.tags.map((t) => (
+          <a class="tag" href={`/tags/${encodeURIComponent(t)}/`}>{t}</a>
+        ))}
+      </div>
+    ) : null}
+
+    <div class="card" style="margin-top: 16px; background: #fff;">
+      <Content />
+    </div>
+  </article>
+</BaseLayout>

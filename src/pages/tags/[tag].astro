@@ -1,0 +1,31 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const all = await getCollection('recipes', ({ data }) => data.status === 'published');
+  const tags = new Set();
+  for (const r of all) for (const t of (r.data.tags ?? [])) tags.add(t);
+  return Array.from(tags).map((t) => ({ params: { tag: t } }));
+}
+
+const tag = Astro.params.tag;
+const all = await getCollection('recipes', ({ data }) => data.status === 'published');
+const recipes = all
+  .filter((r) => (r.data.tags ?? []).includes(tag))
+  .sort((a, b) => (a.data.title.localeCompare(b.data.title)));
+---
+
+<BaseLayout title={`${tag} — Tags — Tasty Ideas`}>
+  <p class="muted"><a href="/tags/">← All tags</a></p>
+  <h1>Tag: {tag}</h1>
+
+  <div class="grid" style="margin-top: 12px;">
+    {recipes.map((r) => (
+      <a class="card" href={`/recipes/${r.id.replace(/\.md$/, '')}/`}>
+        <strong>{r.data.title}</strong>
+        {r.data.date ? <div class="muted">{r.data.date.toISOString().slice(0, 10)}</div> : <div class="muted">&nbsp;</div>}
+      </a>
+    ))}
+  </div>
+</BaseLayout>
