@@ -11,15 +11,15 @@ const { title = "Boss’s Cookbook" } = Astro.props;
     <style>
       :root {
         color-scheme: light;
-        --bg0: #0b0f14;
-        --bg1: #0f1720;
-        --card: rgba(255, 255, 255, 0.06);
-        --border: rgba(255, 255, 255, 0.10);
-        --fg: rgba(255, 255, 255, 0.92);
-        --muted: rgba(255, 255, 255, 0.65);
-        --link: #7dd3fc;
-        --accent: #a78bfa;
-        --shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+        --bg0: #f8fafc;
+        --bg1: #eef2ff;
+        --card: rgba(255, 255, 255, 0.78);
+        --border: rgba(15, 23, 42, 0.12);
+        --fg: rgba(15, 23, 42, 0.96);
+        --muted: rgba(15, 23, 42, 0.64);
+        --link: #2563eb;
+        --accent: #7c3aed;
+        --shadow: 0 10px 30px rgba(2, 6, 23, 0.10);
       }
 
       * { box-sizing: border-box; }
@@ -29,8 +29,9 @@ const { title = "Boss’s Cookbook" } = Astro.props;
         margin: 0;
         font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto,
           Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
-        background: radial-gradient(1200px 700px at 15% 0%, rgba(167, 139, 250, 0.22), transparent 55%),
-          radial-gradient(900px 600px at 85% 10%, rgba(125, 211, 252, 0.20), transparent 55%),
+        background:
+          radial-gradient(1100px 650px at 15% 0%, rgba(124, 58, 237, 0.12), transparent 55%),
+          radial-gradient(900px 600px at 85% 10%, rgba(37, 99, 235, 0.10), transparent 55%),
           linear-gradient(180deg, var(--bg0), var(--bg1));
         color: var(--fg);
         line-height: 1.55;
@@ -44,7 +45,7 @@ const { title = "Boss’s Cookbook" } = Astro.props;
         top: 0;
         z-index: 10;
         backdrop-filter: blur(10px);
-        background: rgba(11, 15, 20, 0.65);
+        background: rgba(248, 250, 252, 0.72);
         border-bottom: 1px solid var(--border);
       }
 
@@ -55,7 +56,7 @@ const { title = "Boss’s Cookbook" } = Astro.props;
       }
 
       nav { display: flex; gap: 14px; align-items: center; }
-      nav a { color: var(--fg); opacity: 0.92; }
+      nav a { color: var(--fg); opacity: 0.86; }
       nav a:hover { opacity: 1; }
 
       .brand {
@@ -93,7 +94,7 @@ const { title = "Boss’s Cookbook" } = Astro.props;
         padding: 4px 10px;
         border: 1px solid var(--border);
         border-radius: 999px;
-        background: rgba(0, 0, 0, 0.18);
+        background: rgba(255, 255, 255, 0.75);
         font-size: 0.9rem;
         color: var(--fg);
       }
@@ -106,12 +107,12 @@ const { title = "Boss’s Cookbook" } = Astro.props;
         border-radius: 12px;
         border: 1px solid var(--border);
         font-size: 1rem;
-        background: rgba(0,0,0,0.22);
+        background: rgba(255, 255, 255, 0.80);
         color: var(--fg);
         outline: none;
       }
-      .search::placeholder { color: rgba(255,255,255,0.55); }
-      .search:focus { border-color: rgba(125, 211, 252, 0.55); box-shadow: 0 0 0 4px rgba(125, 211, 252, 0.12); }
+      .search::placeholder { color: rgba(15,23,42,0.45); }
+      .search:focus { border-color: rgba(37, 99, 235, 0.45); box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12); }
 
       article :global(h1) { margin-top: 0; }
       article :global(h2) { margin-top: 1.2em; }
@@ -121,9 +122,9 @@ const { title = "Boss’s Cookbook" } = Astro.props;
         overflow-x: auto;
         padding: 12px;
         border-radius: 12px;
-        background: rgba(0, 0, 0, 0.45);
-        border: 1px solid var(--border);
-        color: #f5f5f5;
+        background: rgba(15, 23, 42, 0.94);
+        border: 1px solid rgba(15, 23, 42, 0.25);
+        color: #f8fafc;
       }
       article :global(code) {
         font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
